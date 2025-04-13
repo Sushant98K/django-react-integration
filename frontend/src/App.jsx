@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './App.css'
+import axios from 'axios'
 
 const App = () => {
 
@@ -26,9 +27,65 @@ const App = () => {
 
   }, []);
 
+  const [productData, setProductData] = useState([]);
+
+  const endpoint = `${import.meta.env.VITE_API_URL}products/`
+
+  const fetchData = async () => {
+    console.log('fetching...');
+    const response = await axios.get(endpoint)
+    console.log(response);
+
+    const { data } = response
+    setProductData(data)
+    console.log(data);
+    return data   
+    
+  }
+
+  useEffect(() => {
+    fetchData()
+  }, []);
+
+
+  const postData = async () => {
+    const name = 'product test x'
+    const description = 'product test description x'
+    const body = { name, description }
+    
+    const response = await axios.post(endpoint, body)
+    console.log(response);
+    return response.data
+    
+  }
+
+  const handleSendData = async () => {
+    const newData = await postData()
+    if (newData) {
+      setProductData((prevData)=>[...prevData, newData])
+    }
+  }
+
   return (
     <>
-      <h1>Test</h1>
+      <h1>Cores Test</h1>
+      <ul>
+        {
+          data.map(item => <li key={item.id}>{item.title}</li>)
+        }
+      </ul>
+      <h1>Product Test</h1>
+      <ul>
+      {
+          productData.map(el => (
+            <React.Fragment key={el.id}>
+              <li>{el.name}</li>
+              <li>{ el.description}</li>
+            </React.Fragment>
+        ))
+      }
+      </ul>
+      <button onClick={handleSendData}>Create Data</button>
     </>
   )
 }

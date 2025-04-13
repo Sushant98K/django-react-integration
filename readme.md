@@ -40,3 +40,7 @@ add cors_allowed_origins
     CORS_ALLOWED_ORIGINS = [
         'http://localhost:5173'
     ]
+
+for adding data install axios for api handeling
+
+    npm i axios
